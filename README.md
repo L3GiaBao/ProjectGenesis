@@ -1,315 +1,502 @@
 # ProjectGenesis 
+(AI-assisted)
+- Level by level, not week-by-week deadline.
+- I also work on a foudation phase(D&A, CS:APP, OS:3EP, OS2(Linux kernel), TCP-IP Illustrated Vol I + Unix Network Programming), which I should not rush and build a solid ground before going forward.
+# LEVEL 0 — Operator (you can run the entire pipeline end-to-end)
 
-This is the sample **week-by-week execution plan**. May adjust as I go.
-Format per week:
-- **Goal** = what the week is for
-- **Must Achieve** = minimum wins (proof-based)
-- **Sample Focus (flexible)** = examples only (swap as needed)
-- **If Lost** = the next 1–2 actions to restart momentum
+## Purpose
+Become operational so you stop wasting willpower on setup friction.
+Level 0 is about “I can do the motions without guessing.”
 
----
+## Entry conditions
+- You can build the Linux kernel (at least enough to compile the touched subsystem).
+- You have working electronic mail sending from the command line for patches.
 
-## Rules (never change)
-- **Max 3 priorities/week:** P0/P1/P2 (P0 must ship).
-- **Weeks 1–4:** foundation-heavy (OS2 + DS&A + Arch + OSTEP + CS:APP).
-- **Weeks 5–32:** ship-heavy:
-  - **Kernel:** 2 patches **SENT** weekly (proof = lore link(s)).
-  - **DPDK:** 1 patch every **1–2 weeks** (proof = list/Patchwork link).
-  - **Numbers artifact weekly:** script + CSV (p50/p99/p99.9 + CPU + throughput).
-  - **Review SLA:** reply within 24h when feedback arrives.
+## Priority loop while you are in Level 0 (every iteration)
+### Priority 0
+- Produce one “end-to-end dry run” proof pack that shows you can:
+  1) create a patch
+  2) run the patch style checker
+  3) identify maintainers and mailing lists
+  4) send as plain text electronic mail
+  5) collect a baseline benchmark run
+  6) collect a performance counter summary
+  7) collect a recorded kernel trace
+  8) apply and remove network emulation impairment
 
----
+### Priority 1
+- Repeat the same pipeline with a second patch (even a documentation-only patch).
 
-# Phase 0 — Foundation (Weeks 1–4)
+### Priority 2
+- Build and run one Data Plane Development Kit reference sample and record commands.
 
-## Week 1 — Cadence + environment lock-in
-**Goal:** make your study stack + OS2 environment reliable.
-**Must Achieve:**
-- OS2 environment boots/runs reliably (repeatable steps).
-- DS&A: at least 3 short reps done.
-- Arch: at least 1 concrete exercise/note block.
-- OSTEP: at least 1 chapter + notes.
-- CS:APP: at least 1 section + notes or small exercise.
-- Numbers artifact #1 (baseline run script + baseline CSV).
-**Sample Focus (flexible):** OSTEP intro/virtualization; CS:APP bits/ints; OS2 setup.
-**If Lost:** fix OS2 boot/build loop first, then produce baseline benchmark file.
+## Level 0 exit gates (Definition of Done)
+You pass Level 0 only when all are true:
 
-## Week 2 — OS2 Assignment 0 completed
-**Goal:** finish OS2 Assignment 0; deepen processes/memory.
-**Must Achieve:**
-- OS2 Assignment 0 complete (runnable).
-- DS&A: 3–5 reps + brief notes.
-- Arch: 1 exercise.
-- OSTEP: 1 chapter + notes.
-- CS:APP: 1 section + notes.
-- Numbers artifact #2 (same harness, new run, saved CSV).
-**Sample Focus:** OSTEP processes; CS:APP compilation pipeline; DS&A stacks/queues.
-**If Lost:** complete Assignment 0 first; everything else becomes “minimum reps.”
+### Gate 0.1 — Linux kernel patch mechanics are real (not theory)
+You can do all steps, in this order, without improvising:
+1. Make a small, single-theme change.
+2. Generate a patch file using Git.
+3. Run the Linux kernel patch style checker script on the patch file.
+4. Run the maintainer identification script to generate recipients.
+5. Send the patch using Git electronic mail sending, as **inline plain text**, not as an attachment.
+6. Save:
+   - the Message Identifier from the sent mail
+   - the public archive link when it appears
+   - the exact commands you ran
 
-## Week 3 — Driver reps + concurrency start
-**Goal:** build one driver-ish artifact + start concurrency literacy.
-**Must Achieve:**
-- OS2 driver lab progress with one “hard interface” (ioctl OR poll/blocking I/O).
-- DS&A: 3–5 reps.
-- Arch: 1 exercise.
-- OSTEP: 1 chapter (threads/locks) + notes.
-- CS:APP: 1 lab step or 1 section.
-- Numbers artifact #3.
-**Sample Focus:** char driver + userspace exerciser; OSTEP threads; caches overview.
-**If Lost:** make the driver work end-to-end; features can wait.
+### Gate 0.2 — Performance measurement basic competence
+You can produce and archive:
+- A baseline run output (your workload choice, but it must be repeatable).
+- A performance counter statistics capture using `perf stat` for the workload.
+- A recorded profile or at minimum a recorded statistics file (if you use `perf stat record`, archive the output file).
 
-## Week 4 — Tracing started + debug habit
-**Goal:** start tracer (future weapon) + learn to read failures calmly. This week is lighter because the prior weeks were crazy, so I'll spend more time for AP exams.
-**Must Achieve:**
-- OS2 tracer skeleton runs and outputs something.
-- DS&A reps done.
-- Arch reps done.
-- OSTEP chapter + notes.
-- CS:APP progress.
-- Numbers artifact #4.
-**Sample Focus:** minimal kprobe tracer output; basic profiling note.
-**If Lost:** “minimal output first” is the rule—no polishing until it runs.
+### Gate 0.3 — Kernel tracing basic competence
+You can:
+- record a trace using `trace-cmd record`
+- produce a readable trace output (for example, with a reporting command)
+- explain in one paragraph what you traced (for example: scheduling events, wakeups, or a specific tracepoint).
 
----
+### Gate 0.4 — Network emulation competence
+You can:
+- apply fixed delay
+- apply jitter
+- apply packet loss
+- remove the impairment cleanly
+- prove the impairment happened (for example, by showing the configuration you applied and the measured effect).
 
-# Phase 1 — Upstream Boot (Weeks 5–8)
+### Gate 0.5 — Network interface feature visibility
+You can query and record the network interface feature and offload state using Ethernet tool “show features” output.
 
-## Week 5 — Kernel patch pipeline + 2 patches SENT
-**Goal:** patch workflow becomes muscle memory.
-**Must Achieve:**
-- Patch pipeline written down (your checklist).
-- **2 kernel patches SENT** (proof links saved).
-- At least 1 review reply (even if minor).
-- Numbers artifact #5.
-**Sample Focus:** docs/cleanup/warnings in a single subtree.
-**If Lost:** ship doc fixes; they’re fastest to merge and teach the process.
-
-## Week 6 — First mini-series + first v2 loop
-**Goal:** learn series posting and iteration.
-**Must Achieve:**
-- **2 kernel patches SENT** (could be 1 mini-series).
-- At least one v2 (or “v2-ready” improvements if no review yet).
-- Numbers artifact #6.
-**Sample Focus:** 2–3 patch series under one theme.
-**If Lost:** shrink scope, preserve quality, ship two independent patches.
-
-## Week 7 — Align OS2 networking + kernel targets
-**Goal:** aim work toward low-latency networking relevance.
-**Must Achieve:**
-- OS2 networking lab meaningful progress (runnable proof).
-- **2 kernel patches SENT** biased to net/perf/tracing-ish areas.
-- Numbers artifact #7.
-**Sample Focus:** OS2 networking + kernel docs cleanups in net/perf docs.
-**If Lost:** finish minimum OS2 networking deliverable; keep kernel streak alive.
-
-## Week 8 — DPDK boot + first DPDK patch ready/sent
-**Goal:** DPDK becomes real (without hardware excuses).
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- DPDK builds and runs one reference app.
-- DPDK patch #1 prepared OR SENT (depending on readiness).
-- Numbers artifact #8.
-**Sample Focus:** docs/tests/cleanup around laptop-testable paths.
-**If Lost:** keep DPDK scope tiny; do docs/tests if code is heavy.
+## Level 0 artifacts (must exist before you leave Level 0)
+- `LEVEL_0_PROOF.md` with:
+  - commands (copy-paste runnable)
+  - links (public archives for patch)
+  - outputs (or paths to outputs)
+- One baseline `results.csv` and one `run_benchmarks.sh`
+- One `perf_stat.txt` capture
+- One trace output file (whatever `trace-cmd record` produced on your system)
 
 ---
 
-# Phase 2 — Dual Track Output (Weeks 9–16)
+# LEVEL 1 — Public Contributor (you send patches and you measure every time)
 
-## Week 9 — First DPDK patch SENT
-**Goal:** active contributor in both ecosystems.
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- **DPDK patch #1 SENT** (or v2 if you already sent).
-- Numbers artifact #9.
-**If Lost:** DPDK doc/test patch is acceptable—ship something reviewable.
+## Purpose
+Stop “preparing to contribute.” Start contributing consistently.
 
-## Week 10 — Kernel mini-series #2
-**Goal:** reviewers start recognizing your name.
-**Must Achieve:**
-- **2 kernel patches SENT** (preferably as a coherent series).
-- Numbers artifact #10.
-**If Lost:** do two independent patches; series later.
+## Entry conditions
+- You passed Level 0.
 
-## Week 11 — DPDK laptop lab becomes reproducible
-**Goal:** a repeatable DPDK-on-laptop workflow.
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- A reproducible DPDK run script + notes (even if no patch this week).
-- Numbers artifact #11.
-**If Lost:** write the run script + capture output. Proof beats complexity.
+## Priority loop while you are in Level 1 (every iteration)
+### Priority 0 (must ship)
+1) **Send at least one Linux kernel patch** (public link recorded).  
+2) **Ship one numbers artifact** (script + comma-separated values + interpretation note).  
+3) **Run one network impairment scenario** (fixed delay or jitter) and include it as a second row (or second configuration) in the comma-separated values.
 
-## Week 12 — Profiling discipline week
-**Goal:** measurement + profiling becomes routine.
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- One profiling writeup (“bottleneck → change → new numbers”).
-- Numbers artifact #12.
-**If Lost:** a single useful perf/trace output + interpretation is enough.
+### Priority 1 (should ship)
+- Send the second Linux kernel patch.
+- Reply to any reviewer feedback within one day if feedback arrives.
 
-## Week 13 — Bug-hunt attempt #1 (repro-focused)
-**Goal:** learn “repro notes” muscle.
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- One bug reproduction attempt documented (success or failure).
-- Numbers artifact #13.
-**If Lost:** timebox 2 sessions; if no repro, switch targets next week.
+### Priority 2 (nice to ship)
+- Build and run one Data Plane Development Kit reference sample again and capture baseline throughput and latency percentiles.
 
-## Week 14 — DPDK patch #2 or v2 loop
-**Goal:** review iteration skills in DPDK.
-**Must Achieve:**
-- **2 kernel patches SENT**.
-- **DPDK patch #2 SENT** or v2/v3 loop done.
-- Numbers artifact #14.
-**If Lost:** respond fast; don’t let threads go cold.
+## Level 1 exit gates (Definition of Done)
+You pass Level 1 only when all are true at least once:
 
-## Week 15 — Bigger kernel series (if feasible)
-**Goal:** endurance + taste.
-**Must Achieve:**
-- **2 kernel patches SENT** (or 1 larger coherent series).
-- Numbers artifact #15.
-**If Lost:** quality > quantity; still meet the 2-sent quota.
+### Gate 1.1 — Two Linux kernel patches sent
+- Two separate patches are sent as plain text electronic mail.
+- You can point to the public archive links for both.
+- You can show the exact commands used to generate and send them.
 
-## Week 16 — Midpoint packaging
-**Goal:** make your proof browsable.
-**Must Achieve:**
-- A “midpoint summary” (links to best kernel threads, DPDK threads, and benchmark artifacts).
-- **2 kernel patches SENT**.
-- Numbers artifact #16.
-**If Lost:** bullet list + links only. No essays.
+### Gate 1.2 — One real review interaction
+- You receive feedback on at least one patch and reply in-thread.
+- Your reply is interleaved and trimmed (not top-posted).
+- If the reviewer asks for change, you acknowledge what you will change.
+
+### Gate 1.3 — One complete performance case study (small but real)
+One “before and after” case study must exist that includes:
+- baseline numbers (50th percentile latency, 99th percentile latency, 99.9th percentile latency, throughput, Central Processing Unit utilization)
+- one change (one patch or one configuration change)
+- after numbers (same set)
+- one paragraph explaining what changed and why (based on evidence, not vibes)
+
+### Gate 1.4 — One impairment comparison
+You must show at least one comparison:
+- baseline (no impairment)
+- impaired (fixed delay or jitter)
+- measured change in 99th percentile latency and 99.9th percentile latency
+
+## Level 1 patch menu (so you do not stall)
+Pick work that is small and reviewable:
+- documentation fixes in Linux kernel networking documentation
+- selftest improvements (tests are high-signal and reviewers like them)
+- obvious error handling improvements (single function, single file)
+- build warning fixes limited to one subsystem
+
+## Level 1 anti-stall rule
+If you have not sent a patch in 48 hours of available work time:
+- immediately send a documentation-only patch to restore momentum
+- then go back to harder patches
 
 ---
 
-# Phase 3 — Real Fixes (Weeks 17–24)
+# LEVEL 2 — Two Ecosystems (first Data Plane Development Kit patch sent)
 
-## Week 17 — Bugfix #1 target + repro locked
-**Goal:** commit to one real bug.
-**Must Achieve:**
-- Bugfix #1 chosen + repro steps saved.
-- **2 kernel patches SENT** (can be small).
-- Numbers artifact #17.
-**If Lost:** switch bug target fast; keep patch streak.
+## Purpose
+Become publicly active in both:
+- Linux kernel upstream
+- Data Plane Development Kit upstream
 
-## Week 18 — Root cause week
-**Goal:** understand the bug deeply enough to fix.
-**Must Achieve:**
-- Root cause hypothesis + fix draft.
-- **2 kernel patches SENT** (or 1 if bugfix dominates, but aim for 2).
-- Numbers artifact #18.
-**If Lost:** ask a focused question on-list with logs, then continue.
+## Entry conditions
+- You passed Level 1.
 
-## Week 19 — Send Bugfix #1
-**Goal:** post the real fix.
-**Must Achieve:**
-- Bugfix #1 patch/series SENT + logs.
-- Keep kernel cadence (at least 1 additional patch if possible).
-- Numbers artifact #19.
-**If Lost:** send as RFC if unsure; still ship and get feedback.
+## Priority loop while you are in Level 2 (every iteration)
+### Priority 0
+- Send at least one Linux kernel patch.
+- Ship numbers artifact with two configurations (baseline + one change).
 
-## Week 20 — Iterate Bugfix #1 (v2/v3)
-**Goal:** close the loop.
-**Must Achieve:**
-- v2/v3 posted if requested.
-- Review replies within 24h.
-- Numbers artifact #20.
-**If Lost:** do the smallest reviewer-requested change first, resend quickly.
+### Priority 1
+- Send the second Linux kernel patch.
+- Keep review response within one day if feedback arrives.
 
-## Week 21 — Meaningful DPDK patch
-**Goal:** one non-trivial DPDK improvement.
-**Must Achieve:**
-- DPDK meaningful patch SENT.
-- **2 kernel patches SENT**.
-- Numbers artifact #21.
-**If Lost:** “meaningful” can be tests/doc that prevent a real mistake.
+### Priority 2 (this is the Level 2 differentiator)
+- Prepare and send a Data Plane Development Kit patch (documentation or tests are fine).
+- Include a cover letter if it is a patch series.
 
-## Week 22 — DPDK review loops
-**Goal:** push DPDK thread to acceptance.
-**Must Achieve:**
-- v2/v3 responses for DPDK.
-- **2 kernel patches SENT**.
-- Numbers artifact #22.
-**If Lost:** reply fast and keep changes small.
+## Level 2 exit gates (Definition of Done)
+### Gate 2.1 — One Data Plane Development Kit patch sent correctly
+- You send a patch to the Data Plane Development Kit mailing list using Git electronic mail sending.
+- You can show the public link for the patch.
+- If it is a series, you include a cover letter.
 
-## Week 23 — Kernel home-base deepening
-**Goal:** strengthen your chosen area (net/perf/tracing-ish).
-**Must Achieve:**
-- **2 kernel patches SENT** (preferably coherent).
-- Numbers artifact #23.
-**If Lost:** doc cleanups preserve streak and credibility.
+### Gate 2.2 — Data Plane Development Kit build and run is reproducible
+- You can build Data Plane Development Kit from scratch on your machine.
+- You can run one reference sample application.
+- You have a “copy-paste commands” log that reproduces it.
 
-## Week 24 — Bugfix #1 story writeup
-**Goal:** turn fix into a tight narrative.
-**Must Achieve:**
-- Bugfix #1 story: repro → cause → fix → tests → result (1–2 pages max).
-- **2 kernel patches SENT**.
-- Numbers artifact #24.
-**If Lost:** make it a timeline with commands + links.
+### Gate 2.3 — Numbers artifact includes a real systems knob
+Your two-configuration comparison must include at least one of:
+- batch size
+- worker thread count
+- core pinning policy (even if crude)
+- network impairment intensity (for example: fixed delay vs jitter)
+- network interface feature state difference (if you toggled any offloads)
+
+## Level 2 Data Plane Development Kit patch menu
+Start with contributions that are maximally reviewable on any machine:
+- documentation clarifications
+- tests
+- build system improvements
+- small correctness fixes that do not require specialized hardware
+
+## Level 2 anti-stall rule
+If Data Plane Development Kit patch is “almost ready” for more than one iteration:
+- you must either send it as-is (small scope) or abandon and pick a smaller one
+- you are not allowed to “hold” a patch forever
 
 ---
 
-# Phase 4 — Weapon + Packaging (Weeks 25–32)
+# LEVEL 3 — Repeatable Latency Laboratory (control the network, prove cause and effect)
 
-## Week 25 — Choose your weapon
-**Goal:** pick ONE tool to sharpen hard.
-**Must Achieve:**
-- Weapon chosen: (A) latency/measurement toolkit OR (B) tracer polished.
-- v1 skeleton runnable.
-- **2 kernel patches SENT**.
-- Numbers artifact #25.
-**If Lost:** choose latency toolkit; it aligns to HFT best.
+## Purpose
+Become a person who can say:
+“I can reproduce the latency behavior, change one knob, and the percentiles move in a predictable direction.”
 
-## Week 26 — Weapon v1 usable by strangers
-**Goal:** “run this” README + example output.
-**Must Achieve:**
-- Weapon v1 tagged/released (even informal).
-- **2 kernel patches SENT**.
-- Numbers artifact #26.
-**If Lost:** scripts first, docs second. “Docs = run.sh.”
+## Entry conditions
+- You passed Level 2.
 
-## Week 27 — Bugfix #2 selection + repro
-**Goal:** smaller, faster second bug attempt.
-**Must Achieve:**
-- Bugfix #2 repro steps + fix draft.
-- **2 kernel patches SENT**.
-- Numbers artifact #27.
-**If Lost:** switch target quickly; don’t sink weeks.
+## Priority loop while you are in Level 3 (every iteration)
+### Priority 0
+- Numbers artifact must contain:
+  - baseline
+  - impaired
+  - recovered (impairment removed)
+- At least one Linux kernel patch sent.
 
-## Week 28 — Send Bugfix #2
-**Goal:** ship the second bugfix.
-**Must Achieve:**
-- Bugfix #2 patch/series SENT + logs.
-- Numbers artifact #28.
-**If Lost:** send as RFC if needed; don’t stall.
+### Priority 1
+- Second Linux kernel patch sent.
+- One trace capture using `trace-cmd record` during either impaired or recovered run.
 
-## Week 29 — DPDK patch #N
-**Goal:** stay active and close loops.
-**Must Achieve:**
-- DPDK patch or v2/v3 activity.
-- **2 kernel patches SENT**.
-- Numbers artifact #29.
-**If Lost:** pick a doc/test gap and fill it.
+### Priority 2
+- Data Plane Development Kit patch progress (send if ready, or prepare version two if review asked for changes).
 
-## Week 30 — Kernel capstone series
-**Goal:** one polished series that screams competence.
-**Must Achieve:**
-- Capstone kernel series posted (or 2 immaculate patches).
-- Numbers artifact #30.
-**If Lost:** split into smaller series; preserve polish.
+## Level 3 exit gates (Definition of Done)
+### Gate 3.1 — You can run multiple network impairment scenarios
+You must demonstrate with numbers:
+1) fixed delay
+2) jitter
+3) packet loss
+4) rate limiting (if your setup supports it reliably)
 
-## Week 31 — Final portfolio (links only)
-**Goal:** one page of undeniable proof.
-**Must Achieve:**
-- Final link page: best kernel threads, DPDK threads, weapon, numbers artifacts, bugfix stories.
-- **2 kernel patches SENT**.
-- Numbers artifact #31.
-**If Lost:** bullets + links. Done.
+For each scenario you must include:
+- baseline run
+- impaired run
+- recovered run
 
-## Week 32 — Reproducibility + next 90 days
-**Goal:** everything runnable; story clear.
-**Must Achieve:**
-- Fresh-setup reproducibility check (scripts run, artifacts regenerate).
-- Next 90-day target list.
-- Numbers artifact #32.
-**If Lost:** fix scripts so a stranger can run them.
+### Gate 3.2 — Network interface feature state is captured every time
+For each benchmark run you keep:
+- the Ethernet tool “show features” output
+- a short note: “did feature state change this week”
+
+### Gate 3.3 — One tail-latency spike is investigated with kernel tracing
+You must produce one mini-investigation:
+- symptoms: what percentile moved and under what impairment
+- trace capture: what you recorded (events)
+- hypothesis: what subsystem is implicated (scheduling, interrupt handling, soft interrupt processing, queueing)
+- one mitigation experiment: what you changed next
+
+### Gate 3.4 — Benchmarking discipline: you do not lie with numbers
+You must explicitly avoid “latency at maximum load” claims.
+Your report must state:
+- the throughput point you measured at
+- that it is below the knee of the throughput–latency curve
+- whether load generation is open-loop or closed-loop
 
 ---
+
+# LEVEL 4 — Real Bugfix Loop (reproduce → isolate → fix → iterate in public)
+
+## Purpose
+This is where you stop looking like “a patch sender” and start looking like “an engineer who closes loops.”
+
+## Entry conditions
+- You passed Level 3.
+
+## Priority loop while you are in Level 4 (every iteration)
+### Priority 0
+- One bugfix investigation log that ends in:
+  - either a sent fix
+  - or a documented “ruled out” conclusion with evidence
+- One Linux kernel patch sent (if bugfix dominates, the patch can be small).
+
+### Priority 1
+- Second Linux kernel patch sent (or a smaller patch if the bugfix is heavy).
+- Reply to review within one day.
+
+### Priority 2
+- Data Plane Development Kit patch iteration or a new small patch.
+
+## Level 4 exit gates (Definition of Done)
+### Gate 4.1 — One complete bugfix story exists
+Your story must include:
+1) reproduction steps that another person could run
+2) evidence (logs, trace output, or both)
+3) root cause hypothesis
+4) fix patch or fix patch series sent
+5) at least one updated version (version two or later) sent due to feedback
+
+### Gate 4.2 — One performance win exists with profiling evidence
+A performance win must include:
+- baseline numbers
+- after numbers
+- `perf stat` evidence
+- either a recorded profile or a trace capture that supports your explanation
+- one paragraph: why this change should plausibly improve performance (cache behavior, branch behavior, fewer wakeups, fewer queueing points, reduced contention, and so on)
+
+### Gate 4.3 — Timeboxing discipline (you do not disappear into a rabbit hole)
+You must demonstrate that you:
+- timeboxed a failed reproduction attempt
+- switched targets when needed
+- still shipped at least one patch per iteration
+
+---
+
+# LEVEL 5 — Kernel Bypass Credibility (fast packet processing that is measured and explained)
+
+## Purpose
+This level exists because elite low-latency infrastructure roles explicitly value:
+- kernel bypass familiarity
+- user-space networking
+- performance counter-driven optimization
+- measurement competence
+
+## Entry conditions
+- You passed Level 4.
+
+## Priority loop while you are in Level 5 (every iteration)
+### Priority 0
+- Numbers artifact must include at least two fast-path configurations and their percentiles.
+- At least one Linux kernel patch sent.
+
+### Priority 1
+- Second Linux kernel patch sent.
+- Data Plane Development Kit patch thread activity (either new patch or responding to review).
+
+### Priority 2
+- One deeper measurement or trace pass aimed at explaining why 99.9th percentile latency moved.
+
+## Level 5 exit gates (Definition of Done)
+### Gate 5.1 — Data Plane Development Kit series receives real review
+You must have:
+- a coherent patch series (not just a single patch)
+- at least one reviewer comment
+- at least one response from you
+- if requested, an updated version (version two or later)
+
+### Gate 5.2 — Fast-path experiment matrix exists (measured, not guessed)
+You must compare at least two of the following dimensions:
+- batch size
+- worker thread count
+- core pinning policy
+- network interface feature state (offloads on versus off, if you change it)
+- network impairment mode (fixed delay versus jitter versus loss)
+
+For each configuration you record:
+- 50th percentile latency
+- 99th percentile latency
+- 99.9th percentile latency
+- throughput
+- Central Processing Unit utilization
+
+### Gate 5.3 — You can explain kernel bypass tradeoffs in plain language
+One written explanation must exist:
+- what kernel bypass provides (lower overhead in the kernel networking stack path, different batching model, direct device access patterns)
+- what it costs (device binding complexity, different debugging model, different driver model constraints, risk of misleading measurements if offloads change)
+- where latency hides (interrupt handling, soft interrupt processing, queueing, batching, cache effects, scheduling)
+
+---
+
+# LEVEL 6 — Upstream Tooling or Test Improvement Accepted (high-value, not a hobby project)
+
+## Purpose
+You wanted late levels to be directly resume-relevant.
+This level is resume-relevant because it demonstrates you improve:
+- correctness guardrails
+- tooling
+- automation
+- testing discipline
+
+## Entry conditions
+- You passed Level 5.
+
+## Priority loop while you are in Level 6 (every iteration)
+### Priority 0
+- Keep at least one Linux kernel patch sent plus numbers artifact (do not lose momentum).
+
+### Priority 1
+- Drive one upstream acceptance lane hard (Linux kernel or Data Plane Development Kit).
+
+### Priority 2
+- Continue Data Plane Development Kit patch cadence (or iteration) so both ecosystems stay alive.
+
+## Level 6 exit gates (Definition of Done)
+Choose exactly one lane and complete it:
+
+### Lane A — Linux kernel lane
+- One accepted patch that improves one of:
+  - tooling or automation
+  - selftests or test coverage
+  - documentation that prevents a real mistake
+- Evidence of acceptance (maintainer “applied”, “queued”, or merged into a public branch).
+
+### Lane B — Data Plane Development Kit lane
+- One accepted patch that improves one of:
+  - tests
+  - build correctness
+  - continuous integration guardrails
+  - developer tooling that makes changes safer
+- Evidence of acceptance (maintainer “applied”, “queued”, or merged).
+
+Level 6 is passed only when acceptance is real and linkable.
+
+---
+
+# LEVEL 7 — Ownership Under Fire (coherent multi-patch series, review-driven iteration, evidence)
+
+## Purpose
+This is not a recap of earlier levels.
+Earlier levels prove you can send and land patches.
+This level proves you can **lead** a coherent upstream mini-project:
+- scope it
+- communicate it
+- survive feedback
+- ship updates
+- land a meaningful subset
+- attach honest evidence
+
+## Entry conditions
+- You passed Level 6.
+
+## Priority loop while you are in Level 7 (every iteration)
+### Priority 0
+- Continue shipping baseline numbers artifacts (do not stop measuring).
+
+### Priority 1
+- Continue shipping Linux kernel patches (at least one per iteration), even if small, to keep upstream presence.
+
+### Priority 2 (the Level 7 differentiator)
+- Push the ownership series forward: cover letter, patch series, version two, acceptance.
+
+## Level 7 exit gates (Definition of Done)
+Choose one lane and complete all requirements.
+
+### Lane A — Linux kernel ownership series
+You must complete all of the following:
+
+1) **Series size and coherence**
+- Post a coherent series of **four to eight patches**.
+- Include a cover letter that explains:
+  - the problem
+  - the approach
+  - why the series is structured the way it is
+  - what testing you ran
+
+2) **Series scope is non-trivial but sane**
+- The series must touch at least:
+  - two files, or
+  - two logical components
+
+3) **Public review-driven iteration**
+- You must send at least one updated version (version two or later) because reviewers requested changes.
+- Your cover letter includes a clear change log of what changed since the previous version.
+
+4) **Acceptance signal**
+- At least two patches from the series are accepted, applied, or merged.
+- You capture the evidence link(s).
+
+5) **Evidence attached**
+- If performance-related:
+  - attach numbers artifact before and after that shows what moved
+- If correctness or tooling related:
+  - attach “no regression” numbers artifact plus test evidence
+
+### Lane B — Data Plane Development Kit ownership series
+You must complete all of the following:
+
+1) **Series size and coherence**
+- Post a coherent series of **three to six patches** with a cover letter.
+
+2) **Guardrails included**
+- At least one patch in the series improves:
+  - tests, or
+  - documentation that prevents mistakes, or
+  - an automated check
+
+3) **Public review-driven iteration**
+- You must send at least one updated version (version two or later) due to reviewer feedback.
+
+4) **Acceptance signal**
+- At least one patch is accepted, applied, or merged with evidence.
+
+5) **Measured outcome**
+- Include a before/after numbers artifact showing:
+  - 50th percentile latency, 99th percentile latency, 99.9th percentile latency
+  - throughput
+  - Central Processing Unit utilization
+
+## Mandatory “edge” pressure test (pick one)
+To pass Level 7 you must also do one of these:
+
+1) Write a 200–400 word explanation that a maintainer could forward to another maintainer as the justification for the series.
+2) Run an additional scenario that could have regressed and prove it did not regress (example: different message size, different worker thread count, different impairment mode).
+3) Demonstrate benchmarking discipline explicitly:
+   - show that your main measurement point is below the knee of the throughput–latency curve
+   - state whether your load generator is open-loop or closed-loop
+
+---
+
+# Optional: Personal Capstone (only after Level 7, not required for passing)
+
+After Level 7, you are allowed to choose any personal project at any scale you want.
+It is optional because at that point your public upstream proof already speaks for itself.
+
