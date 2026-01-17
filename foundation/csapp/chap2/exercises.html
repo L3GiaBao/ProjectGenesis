@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2</title>
+    <style>
+        pre {
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+   <b>2.57</b> 
+   <pre><code>void show_bytes(unsigned char *start, size_t len){
+	for (size_t i = 0;i < len;i++) {
+		printf("%.2x",start[i]);
+	}	
+	printf("\n");
+}
+
+void show_short(short x) {
+	show_bytes((unsigned char *)&x,sizeof(short));
+}
+
+void show_long(long x) {
+	show_bytes((unsigned char *)&x,sizeof(long));
+}
+
+void show_double(double x) {
+	show_bytes((unsigned char *)&x,sizeof(double));	
+}
+    </code></pre>
+    
+    <b>2.58</b>
+    <pre><code>int is_little_endian() {
+	int i = 1;
+
+	char *c = (char *)&i;
+
+	if (*c==1) return 1;
+	return 0;
+}
+    </code></pre>
+    <b>2.59</b>
+    <pre><code>int foo(int x, int y) {
+	char *c = (char *)&x;
+	int tmp = y; // dont wanna change y
+	char *t = (char *)&tmp;
+	*t = *c;
+	return tmp;	
+}
+    </code></pre>
+
+    <b>2.61</b>
+    <pre><code>int fooA(int x) {
+	return !!x;
+}
+
+int fooB(int x) {
+	return !x;
+}
+
+int fooC(int x) {
+	char *c = (char *)&x;
+	return !!*c;	
+}
+
+int fooD(int x) {
+	char *c = (char *)&x;
+	return !*c;	
+}
+    </code></pre>
+    <b>2.62</b>
+    <pre><code>int int_shifts_are_arithmetic() {
+	int x = -1;
+
+	int result = x>>1;
+
+	if (result>0) return 1;
+	return 0;
+}
+    </code></pre>
+    <b>2.64</b>
+    <pre><code>int any_odd_one(unsigned x) {
+		unsigned y = 0xAAAAAAAA;
+
+		return (x&y) != 0;
+}
+    </code></pre>
+
+	<b>2.65</b>
+	<pre><code>int odd_ones(unsigned int num) {
+	const int total_bits = sizeof(num)<<3;
+	int count = 0;
+
+	for (int t=1;t < total_bits;t+=2) {
+		unsigned int bit = (num>>t) & 1;
+		if (bit) count++;
+	}
+	return count;
+}
+</code></pre>
+	<b>2.73</b>
+	<pre><code>int saturating_add(int x, int y) {
+	if (x>0 && y> INT_MAX - x ) { // I used var = x+y; and then check if its <=0 which works
+				      // but this is more efficient and at least doesn't contain UB
+		return INT_MAX;
+	} else if (x<0 && y < INT_MIN - x) {
+		return INT_MIN;
+	}
+	return x+y;
+}
+	</code></pre>
+	<b>2.84</b>
+	<pre><code></code></pre>
+</body>
+</html>

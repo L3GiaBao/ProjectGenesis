@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&A</title>
+    <style>
+        pre {
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body style="font-size: 21px;">
+
+    <h1 style="text-align: center;">Data Structures and Algorithm</h1>
+
+    <p>Stacks are for operations of reversed order, making changes on the latest "updates", and recursion(more on this later). Queues are for order-preserving operations.</p>
+    <hr>
+    <div>
+        <table border="1" cellspacing="0" cellpadding="6">
+            <thead>
+            <tr>
+                <th></th>
+                <th>inplace?</th>
+                <th>stable?</th>
+                <th>worst</th>
+                <th>average</th>
+                <th>best</th>
+                <th>remarks</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>selection</th>
+                <td>✓</td>
+                <td></td>
+                <td>N<sup>2</sup>/2</td>
+                <td>N<sup>2</sup>/2</td>
+                <td>N<sup>2</sup>/2</td>
+                <td>N exchanges</td>
+            </tr>
+            <tr>
+                <th>insertion</th>
+                <td>✓</td>
+                <td>✓</td>
+                <td>N<sup>2</sup>/2</td>
+                <td>N<sup>2</sup>/4</td>
+                <td>N</td>
+                <td>use for small N or partially ordered</td>
+            </tr>
+            <tr>
+                <th>shell</th>
+                <td>✓</td>
+                <td></td>
+                <td>?</td>
+                <td>?</td>
+                <td>N</td>
+                <td>tight code, subquadratic</td>
+            </tr>
+            <tr>
+                <th>merge</th>
+                <td></td>
+                <td>✓</td>
+                <td>N lg N</td>
+                <td>N lg N</td>
+                <td>N lg N</td>
+                <td>N log N guarantee, stable</td>
+            </tr>
+            <tr>
+                <th>quick</th>
+                <td>✓</td>
+                <td></td>
+                <td>N<sup>2</sup>/2</td>
+                <td>2N ln N</td>
+                <td>N lg N</td>
+                <td>N log N probabilistic guarantee; fastest in practice</td>
+            </tr>
+            <tr>
+                <th>3-way quick</th>
+                <td>✓</td>
+                <td></td>
+                <td>N<sup>2</sup>/2</td>
+                <td>2N ln N</td>
+                <td>N</td>
+                <td>improves quicksort in presence of duplicate keys</td>
+            </tr>
+            <tr>
+                <th>???</th>
+                <td>✓</td>
+                <td>✓</td>
+                <td>N lg N</td>
+                <td>N lg N</td>
+                <td>N lg N</td>
+                <td>holy sorting grail</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <hr>
+   
+    <div>
+            <p>A note about recursion(in type-safe languages): For functions that perform actions directly on mutable data passed by reference, a void return type is typically sufficient. But more generally, recursion works when each call can reduce the problem and return a summary of its subproblem. The parent merges summaries into a bigger summary. Sometimes you would want to do something like "parent = foo(child);".</p>
+        <pre><code>struct Node *delete(struct Node *root, int key) {
+	if (!root) return NULL;
+	
+	if (root->key > key) {
+		root->left = delete(root->left,key);
+	} else if (root->key < key) {
+		root->right = delete(root->right, key);
+	} else {
+		if (root->left==NULL) {
+			struct Node *tmp = root->right;
+			free(root);
+			return tmp;
+		} else if (root->right==NULL) {
+			struct Node *tmp = root->left;
+			free(root);
+			return tmp;	
+		} else {
+			struct Node *succ = findMin(root->right);
+			root->val = succ->val;
+			root->key = succ->key;
+			root->right = delete(root->right,succ->key);
+		}
+	}
+	return root;
+}
+</code></pre>
+        <p>Or:</p>
+        <pre><code>bool check_BST(struct Node *root, int min, int max) {
+	if (root==NULL) return true;
+	
+	if (root->key<=min || root->key>=max) {
+		return false;
+	}
+
+	return check_BST(root->left,min,root->key) && check_BST(root->right,root->key,max);
+}
+</code></pre>
+    </div>
+    <hr>
+
+    <div>
+        <table border="1" cellspacing="0" cellpadding="6">
+            <thead>
+            <tr>
+                <th>implementation</th>
+                <th>worst: search</th>
+                <th>worst: insert</th>
+                <th>worst: delete</th>
+                <th>avg: search hit</th>
+                <th>avg: insert</th>
+                <th>avg: delete</th>
+                <th>ordered iteration?</th>
+                <th>key interface</th>
+                <th>remarks</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>sequential search<br>(unordered list)</th>
+                <td>N</td>
+                <td>N</td>
+                <td>N</td>
+                <td>N/2</td>
+                <td>N</td>
+                <td>N/2</td>
+                <td>no</td>
+                <td>equals()</td>
+                <td>simplest ST; good only for very small N</td>
+            </tr>
+
+            <tr>
+                <th>binary search<br>(ordered array)</th>
+                <td>lg N</td>
+                <td>N</td>
+                <td>N</td>
+                <td>lg N</td>
+                <td>N/2</td>
+                <td>N/2</td>
+                <td>yes</td>
+                <td>compareTo()</td>
+                <td>fast lookups; inserts/deletes shift elements (costly)</td>
+            </tr>
+
+            <tr>
+                <th>BST</th>
+                <td>N</td>
+                <td>N</td>
+                <td>N</td>
+                <td>1.38 lg N</td>
+                <td>1.38 lg N</td>
+                <td>?</td>
+                <td>yes</td>
+                <td>compareTo()</td>
+                <td>great when roughly balanced/random keys; can degrade to a linked list if keys arrive sorted; supports range queries (min/max/floor/ceiling/inorder)</td>
+            </tr>
+
+            <tr>
+                <th>red-black tree</th>
+                <td>2 lg N</td>
+                <td>2 lg N</td>
+                <td>2 lg N</td>
+                <td>1.00 lg N</td>
+                <td>1.00 lg N</td>
+                <td>1.00 lg N</td>
+                <td>yes</td>
+                <td>compareTo()</td>
+                <td>balanced BST with worst-case log guarantees; good default for ordered ops</td>
+            </tr>
+
+            <tr>
+                <th>separate chaining</th>
+                <td>lg N<sup>*</sup></td>
+                <td>lg N<sup>*</sup></td>
+                <td>lg N<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>no</td>
+                <td>equals()</td>
+                <td>expected constant-time when you resize & keep load factor reasonable; delete is straightforward; needs extra pointers/memory per node; performance depends heavily on hash quality/resizing</td>
+            </tr>
+
+            <tr>
+                <th>linear probing</th>
+                <td>lg N<sup>*</sup></td>
+                <td>lg N<sup>*</sup></td>
+                <td>lg N<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>3-5<sup>*</sup></td>
+                <td>no</td>
+                <td>equals()</td>
+                <td>very cache-friendly (fast in practice) but must keep table not-too-full; clustering hurts; deletes use tombstones/rehash; resize early to prevent performance collapse</td>
+            </tr>
+            </tbody>
+        </table>
+    <br>
+    </div>
+
+</body>
+</html>
+
